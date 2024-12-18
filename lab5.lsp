@@ -76,7 +76,7 @@
 
 (defun test-filter-data ()
   (let ((article-with-id-1 (select "scientific-articles.csv" :ID "1"))
-        (authors-with-speciality-123 (select "specialities.csv" :Code "123")))
+        (authors-with-speciality-123 (select "scientific-articles.csv" :CODE "123")))
     (format t "Article with id 1:~%")
     (let ((article (funcall article-with-id-1)))
       (assert (not (null article)) () "No article with ID 1 found")

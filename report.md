@@ -62,7 +62,7 @@
                   (loop for header in headers
                         for value in values
                         collect (cons (intern (string-upcase (string-trim '(#\Space #\Newline #\") header)) :keyword) 
-                                      (string-trim '(#\Space #\") value))))
+                                      (string-trim '(#\Space #\") value)))))
               data-lines))))
 
 (defun select (file-path &rest filters)
@@ -117,7 +117,7 @@
 
 (defun test-filter-data ()
   (let ((article-with-id-1 (select "scientific-articles.csv" :ID "1"))
-        (authors-with-speciality-123 (select "specialities.csv" :Code "123")))
+        (authors-with-speciality-123 (select "scientific-articles.csv" :CODE "123")))
     (format t "Article with id 1:~%")
     (let ((article (funcall article-with-id-1)))
       (assert (not (null article)) () "No article with ID 1 found")
@@ -195,6 +195,7 @@ ID,Code,Name
 
 ### Тестові набори та утиліти
 ```lisp
+
 (defun alist-to-hash-table (alist)
   "Converts an association list to a hash table."
   (let ((hash (make-hash-table :test 'equal))) ; Create an empty hash table
@@ -215,7 +216,7 @@ ID,Code,Name
 
 (defun test-filter-data ()
   (let ((article-with-id-1 (select "scientific-articles.csv" :ID "1"))
-        (authors-with-speciality-123 (select "specialities.csv" :Code "123")))
+        (authors-with-speciality-123 (select "scientific-articles.csv" :CODE "123")))
     (format t "Article with id 1:~%")
     (let ((article (funcall article-with-id-1)))
       (assert (not (null article)) () "No article with ID 1 found")
@@ -276,23 +277,30 @@ ID,Code,Name
 ```
 All articles:
 (ID . 1): ((ARTICLE_NAME . Аналіз алгоритмів) (AUTHOR . Іваненко І.)
-           (CODE . 2022))
+           (YEAR . 2022) (CODE . 122))
 (ID . 2): ((ARTICLE_NAME . Проектування систем)
-           (AUTHOR . Петренко П.;Сидоренко С.) (CODE . 2023))
+           (AUTHOR . Петренко П.;Сидоренко С.) (YEAR . 2023) (CODE . 123))
 (ID . 3): ((ARTICLE_NAME . Моделювання процесів) (AUTHOR . Ковальчук К.)
-           (CODE . 2021))
+           (YEAR . 2021) (CODE . 124))
+(ID . 4): ((ARTICLE_NAME . Проектування систем 2) (AUTHOR . Сидоренко С.)
+           (YEAR . 2024) (CODE . 123))
 
 All specialities:
 (ID . 1): ((CODE . 121) (NAME . Інженерія програмного забезпечення))
 (ID . 2): ((CODE . 122) (NAME . Комп'ютерні науки))
 (ID . 3): ((CODE . 123) (NAME . Компʼютерна інженерія))
-(ID . 4): ((CODE . 124) (NAME . Системний аналіз))
+(ID . 4): ((CODE . 124) (NAME . Системний аналіз5))
+
 Article with id 1:
 (ID . 1): ((ARTICLE_NAME . Аналіз алгоритмів) (AUTHOR . Іваненко І.)
-           (CODE . 2022))
+           (YEAR . 2022) (CODE . 122))
 
 Authors with speciality 123:
-(ID . 3): ((CODE . 123) (NAME . Компʼютерна інженерія))
+(ID . 2): ((ARTICLE_NAME . Проектування систем)
+           (AUTHOR . Петренко П.;Сидоренко С.) (YEAR . 2023) (CODE . 123))
+(ID . 4): ((ARTICLE_NAME . Проектування систем 2) (AUTHOR . Сидоренко С.)
+           (YEAR . 2024) (CODE . 123))
+
 Speciality as hash table:
 ID => 1
 CODE => 121
@@ -302,11 +310,10 @@ Keys in hash table:
 ID
 CODE
 NAME
-
 Updated structure of specialities.csv
 ID,Code,Name
 1,121,Інженерія програмного забезпечення
 2,122,Комп'ютерні науки
 3,123,Компʼютерна інженерія
-4,124,Системний аналіз5,113,Прикладна математика
+4,124,Системний аналіз5
 ```
